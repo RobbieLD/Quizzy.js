@@ -1,7 +1,9 @@
+// TODO: Refactor this file and make it look like a real node project
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+// TODO: Make this into a class
 // global vars
 var games = {};
 
@@ -37,6 +39,11 @@ io.on('connection', function(socket){
             io.emit('playersUpdate', games[req.code]);
             console.log("Players: " + JSON.stringify(games));
         }
+    });
+
+    socket.on('sendMessage', function(message) {
+        console.log("Message recieved: " + JSON.stringify(message));
+        io.emit('chatMessage', message );
     });
 
     socket.on('validateJoin', function(req) {
@@ -78,7 +85,6 @@ io.on('connection', function(socket){
         socket.username = req.name;
         socket.code = req.code;
 
-        // TODO: Check if this is a dupe name in this game
         if (games[req.code]) {
             games[req.code].push({ name: req.name });
 

@@ -2,6 +2,7 @@
   <div id="app">
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
+        <!-- Just using the vue logo here as i'm too lazy to make my own just yet -->
         <router-link class="navbar-item" :to="{ name: 'Landing' }"><img src="./assets/logo.png"></router-link>
       </div>
     </nav>
@@ -60,9 +61,5 @@ export default {
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
 }
 </style>
