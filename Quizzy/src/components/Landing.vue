@@ -1,8 +1,7 @@
 <template>
   <section class="section">
-    <div class="container">
-      Some Landing Content Here
-    </div>
+      <img src="../assets/logo.png">
+      <div class="welcome">Welcome to Quizzy</div>
   </section>
 </template>
 
@@ -23,4 +22,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.welcome {
+  text-align: center;
+}
 </style>

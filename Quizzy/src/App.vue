@@ -11,6 +11,12 @@
           <router-link v-show="!this.$root.appError.name" class="navbar-item" :to="{ name: 'JoinGame' }">Join Game</router-link>
         </div>
       </div>
+
+      <button class="button navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </nav>
     <section v-if="this.$root.appError.name" class="hero is-danger">
       <div class="hero-body">
@@ -73,6 +79,4 @@ export default {
 </script>
 
 <style>
-#app {
-}
 </style>
