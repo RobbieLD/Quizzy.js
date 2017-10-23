@@ -1,5 +1,6 @@
 // TODO: Refactor this file and make it look like a real node project
-
+// https://codereview.stackexchange.com/questions/158716/socket-io-node-js-object-oriented-code-structure-approach
+// https://stackoverflow.com/questions/23653617/socket-io-listen-events-in-separate-files-in-node-js
 // TODO: Don't send messages and game commands to every connected client 
 // but instead managed each client in a room using like this
 // https://stackoverflow.com/questions/35680565/sending-message-to-specific-client-in-socket-io
