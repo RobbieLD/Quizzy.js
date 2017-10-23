@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import VeeValidate from 'vee-validate';
-import Landing from '@/components/Landing'
-import NewGame from '@/components/NewGame'
-import JoinGame from '@/components/JoinGame'
-import GameLobby from '@/components/GameLobby'
+import Landing from '@/components/routes/Landing'
+import NewGame from '@/components/routes/NewGame'
+import JoinGame from '@/components/routes/JoinGame'
+import GameLobby from '@/components/routes/GameLobby'
 
 Vue.use(VeeValidate)
 Vue.use(Router)

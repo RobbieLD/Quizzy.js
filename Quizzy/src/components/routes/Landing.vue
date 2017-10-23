@@ -1,7 +1,7 @@
 <template>
   <section class="section">
-      <img src="../assets/logo.png">
-      <div class="welcome">Welcome to Quizzy</div>
+      <img src="../../assets/logo.png">
+      <div class="has-text-centered">Welcome to Quizzy</div>
   </section>
 </template>
 
@@ -22,7 +22,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.welcome {
-  text-align: center;
-}
 </style>

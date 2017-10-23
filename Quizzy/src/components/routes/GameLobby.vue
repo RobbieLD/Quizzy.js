@@ -19,6 +19,7 @@
     </section> -->
 
       <h4 class="title is-4">Players</h4>
+      <!-- TODO: Make this into it's own component -->
       <div class="box">
           <table class="table">
               <thead>
@@ -42,14 +43,16 @@
       <div class="box">
           TODO: Add the game component in here (Lots of other stuff to do first)
       </div>
+      <!-- TODO: Make this into it's own component -->
       <h4 class="title is-4">Chat</h4>
       <div class="box">
           <!-- The lobby chat console -->
+          <!-- TODO: Make the filtering happen on the server side -->
           <div v-for="(msg, index) in messages.filter(m => m.gamecode == gamecode)" v-bind:key="index">
-              {{ msg.sender }} : {{ msg.message }}
+              <span v-bind:class="{'has-text-primary' : msg.sender == username}">{{ msg.sender }}</span> : {{ msg.message }}
           </div>
           <div class="field">
-              <input type="text" v-model="message" placeholder="Enter Chat Message" class="input">
+              <input type="text" v-model="message" v-on:keyup.enter="sendMessage" placeholder="Enter Chat Message" class="input">
           </div>
           <div class="field">
               <button class="button is-primary" v-on:click="sendMessage">Send</button>
@@ -89,6 +92,10 @@ export default {
         chatMessage (message) {
             console.log("Chat message received:" + JSON.stringify(message));
             this.messages.push(message);
+            //TODO: Make this number a config param
+            if (this.messages.length > 10) {
+                this.messages.shift();
+            }
         }
     },
 
