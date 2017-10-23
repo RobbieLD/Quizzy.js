@@ -1,10 +1,14 @@
 // TODO: Refactor this file and make it look like a real node project
+
+// TODO: Don't send messages and game commands to every connected client 
+// but instead managed each client in a room using like this
+// https://stackoverflow.com/questions/35680565/sending-message-to-specific-client-in-socket-io
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 // TODO: Make this into a class
-// global vars
+// main games object
 var games = {};
 
 app.get('/', function(req, res){

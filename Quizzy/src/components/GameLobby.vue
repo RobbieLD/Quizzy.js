@@ -5,7 +5,7 @@
           <span>Gamecode: {{ gamecode }}</span>
       </div>
        -->
-      <section class="hero is-primary">
+      <!-- <section class="hero is-primary">
       <div class="hero-body">
         <div class="container">
           <h4 class="title is-4">
@@ -16,19 +16,21 @@
           </h5>
         </div>
       </div>
-    </section>
+    </section> -->
 
       <h4 class="title is-4">Players</h4>
       <div class="box">
           <table class="table">
               <thead>
                   <tr>
-                      <th>PLayer Name</th>
-                      <th>Player Score</th>
+                      <th>Rank</th>
+                      <th>Name</th>
+                      <th>Score</th>
                   </tr>
               </thead>
               <tbody>
-                  <tr v-for="(player, index) in players" v-bind:key="index">
+                  <tr v-for="(player, index) in players" v-bind:key="index" v-bind:class="{ 'is-selected' : player.name == username}">
+                    <td>{{ index + 1 }}</td>
                     <td>{{ player.name }}</td>
                     <td></td>
                  </tr>
@@ -36,6 +38,10 @@
           </table>
       </div>
       <!-- TODO: add in here actual game....that's a rater big TODO i'll admit. -->
+      <h4 class="title is-4">Game Code: {{ gamecode }}</h4>
+      <div class="box">
+          TODO: Add the game component in here (Lots of other stuff to do first)
+      </div>
       <h4 class="title is-4">Chat</h4>
       <div class="box">
           <!-- The lobby chat console -->
@@ -48,9 +54,6 @@
           <div class="field">
               <button class="button is-primary" v-on:click="sendMessage">Send</button>
           </div>
-      </div>
-      <div class="field">
-          <router-link class="button is-primary is-large" to="/game/">Play</router-link>
       </div>
   </div> 
 </template>
