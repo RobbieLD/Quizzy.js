@@ -1,35 +1,7 @@
 <template>
   <div id="app">
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <!-- Just using the vue logo here as i'm too lazy to make my own just yet -->
-        <router-link class="navbar-item" :to="{ name: 'Landing' }"><img src="./assets/logo.png"></router-link>
-      </div>
-      <div class="navbar-menu">
-        <div class="navbar-start">
-          <router-link v-show="!this.$root.appError.name" class="navbar-item" :to="{ name: 'NewGame' }">New Game</router-link>
-          <router-link v-show="!this.$root.appError.name" class="navbar-item" :to="{ name: 'JoinGame' }">Join Game</router-link>
-        </div>
-      </div>
-
-      <button class="button navbar-burger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </nav>
-    <section v-if="this.$root.appError.name" class="hero is-danger">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-            {{ this.$root.appError.name }}
-          </h1>
-          <h2 class="subtitle">
-            {{ this.$root.appError.message }}
-          </h2>
-        </div>
-      </div>
-    </section>
+    <navbar></navbar> 
+    <error></error>
     <!-- Column setup -->
     <div class="columns">
       <div class="column"></div>
@@ -43,11 +15,19 @@
 </template>
 
 <script>
+import Navbar from '@/components/plugins/Navbar'
+import Error from '@/components/plugins/Error'
+
 export default {
   name: 'app',
   data() {
     return {
     }
+  },
+
+  components: {
+    Navbar,
+    Error
   },
 
   sockets: {
