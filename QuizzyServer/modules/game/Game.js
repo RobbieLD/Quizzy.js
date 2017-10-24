@@ -1,3 +1,5 @@
+var { Player } = require('./Player');
+
 exports.Game = class {
     
     constructor(gameCode, io) {
@@ -8,24 +10,23 @@ exports.Game = class {
 
     }
 
-    join(player) {
-        console.log("Game - join - Player: " + player.userName + " joining game: " + this.gameCode);
-        this.players.push(player);
+    join(request, socketId) {
+        console.log("Game - join - Player: " + request.userName + " joining game: " + this.gameCode + " with socket id:" + socketId);
+        this.players.push(new Player(request.userName, request.gameCode, socketId));
     }
 
-    leave(player) {
-        console.log("Game - leave - Player: " + player.userName + " leaving game: " + this.gameCode);
-        this.players = this.players.filter(p => p.userName != player.userName);
-        player.gameCode ='';
-        player.userName = '';
+    leave(userName) {
+        console.log("Game - leave - Player: " + userName + " leaving game: " + this.gameCode);
+        this.players = this.players.filter(p => p.userName != userName);
     }
 
     isPlayerNameInUse(name) {
-        // TODO: This
-        return false;
+        return this.players.some(p => p.userName == name);
     }
 
     toString() {
-        return this.players.join();
+        return this.players.map(m => {
+            return m.userName;
+        }).join();
     }
 }

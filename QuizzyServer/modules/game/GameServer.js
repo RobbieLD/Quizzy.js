@@ -1,10 +1,11 @@
-var { Game } = require('./modules/game/Game');
+var { Game } = require('./Game');
 
 exports.GameServer = class {
     constructor(io,debug) {
         this.io = io;
         this.debug = debug;
         this.games = {};
+        this.gameCount = 100;
     }
 
     listenForClients() {
@@ -15,24 +16,24 @@ exports.GameServer = class {
 
             // This event is captured when the connection is between the client and the server is dropped
             socket.on('disconnect', () => {
-                disconnectClient(socket);
+                this.disconnectClient(socket);
             });
 
-            socket.on('creatGame', () => {
-                createGame(socket);
+            socket.on('createGame', () => {
+                this.createGame(socket);
             });
 
             socket.on('join', (request) => {
-                joinGame(request, socket);
+                this.joinGame(request, socket);
             });
 
             // This event is captured when a client chooses to leave
             socket.on('leave', () => {
-                disconnectClient(socket);
+                this.disconnectClient(socket);
             });
 
             socket.on('validateJoin', (request) => {
-                validateJoin(request, socket);
+                this.validateJoin(request, socket);
             });
         });
     }
@@ -58,7 +59,7 @@ exports.GameServer = class {
         }
         else {
             console.log("GameServer - validateJoin - Gamecode is not valid");
-            io.to(socket.id).emit('joinValidated', { valid: false, message: req.code + ' Is not a valid game code' });
+            this.io.to(socket.id).emit('joinValidated', { valid: false, message: request.gameCode + ' Is not a valid game code' });
         }
     }
 
@@ -75,37 +76,38 @@ exports.GameServer = class {
         var game = this.games[request.gameCode];
 
         if (game) {
-            // from here on in the socket is now the player (in the game)
-            game.join(socket);
-
-            io.to(request.gameCode).emit('playersUpdate', game.players);
             
-            logGameState();
+            game.join(request, socket.id);
+
+            this.io.to(request.gameCode).emit('playersUpdate', game.players);
+            
+            this.logGameState();
         }
         else {
             console.log("GameServer - joinGame - User:" + request.userName + " trying to join game: " + request.gameCode + " that doesn't exist");
-            io.to(socket.id).emit('gameError', "Trying to join game that doesn't exist");
+            this.io.to(socket.id).emit('gameError', "Trying to join game that doesn't exist");
         }
     }
     
     disconnectClient(socket) {
         console.log("GameServer - disconnectClient - " + socket.userName + " disconnected from game: " + socket.gameCode);
-        logGameState();
+        this.logGameState();
 
         // only try disconnecting the player if they were in a game
         if (socket.gameCode) {
             // hand off the leave call to the game they player is in
-            this.games[socket.gameCode].leave(socket);
+            this.games[socket.gameCode].leave(socket.userName);
 
             // alert the player in this game that someone left
-            this.io.to(socket.gameCode).emit('playersUpdate', this.games[socket.gameCode]);
-
-            logGameState();
+            this.io.to(socket.gameCode).emit('playersUpdate', this.games[socket.gameCode].players);
+            
+            this.logGameState();
         }
     }
 
     createGame(socket) {
-        var newGameCode = this.games.length + 1;
+        
+        var newGameCode = this.gameCount++;
         console.log("GameServer - createGame - creating game: " + newGameCode);
         var newGame = new Game(newGameCode, this.io);
         this.games[newGameCode] = newGame;
@@ -113,13 +115,13 @@ exports.GameServer = class {
         // Only notify the client who requested to game to be created
         this.io.to(socket.id).emit('gameCreated', newGameCode);
 
-        logGameState();
+        this.logGameState();
     }
 
     logGameState() {
         if (this.debug) {
             for (var key in this.games) {
-                console.log("GameServer - logGameState - " + this.games[key].toString());
+                console.log("GameServer - logGameState - " + this.games[key].gameCode + ":" + this.games[key].toString());
             }
         }
     }

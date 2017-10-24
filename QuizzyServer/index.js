@@ -6,10 +6,6 @@ var io = require('socket.io')(http);
 var { Chat } = require('./modules/chat/Chat');
 var { GameServer } = require('./modules/game/GameServer')
 
-// TODO: Make this into a class
-// main games object
-var games = {};
-
 // Start listening for chat messages
 new Chat(io).listenForMessages();
 
