@@ -33,7 +33,7 @@ io.on('connection', function(socket){
         if (socket.username) {
             games[socket.code] = games[socket.code].filter(p => p.name != socket.username);
             
-            io.emit('playersUpdate', games[socket.code]);
+            io.to(socket.code).emit('playersUpdate', games[socket.code]);
             
             console.log("Players: " + JSON.stringify(games));
         }
@@ -44,8 +44,10 @@ io.on('connection', function(socket){
         // only let the player leave the game if they are actually in there
         if (games[req.code]) {
             games[req.code] = games[req.code].filter(p => p.name != socket.username);
-        
-            io.emit('playersUpdate', games[req.code]);
+            
+            // remove the player from the room
+            socket.leave(req.gamecode);
+            io.to(req.gamecode).emit('playersUpdate', games[req.code]);
             console.log("Players: " + JSON.stringify(games));
         }
     });
@@ -106,7 +108,7 @@ io.on('connection', function(socket){
         }
         else {
             console.log("User trying to join game that doesn't exist yet");
-            io.emit('gameError', "Trying to join game that doesn't exist");
+            io.to(req.code).emit('gameError', "Trying to join game that doesn't exist");
         }
     });
 
