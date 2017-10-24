@@ -16,6 +16,10 @@ app.get('/', function(req, res){
   res.send('This is the Quizzy Server');
 });
 
+http.listen(3000, function(){
+    console.log('listening on *:3000');
+  });
+
 io.on('connection', function(socket){
     
     console.log("Client Connected");
@@ -48,7 +52,7 @@ io.on('connection', function(socket){
 
     socket.on('sendMessage', function(message) {
         console.log("Message recieved: " + JSON.stringify(message));
-        io.emit('chatMessage', message );
+        io.to(message.gamecode).emit('chatMessage', message );
     });
 
     socket.on('validateJoin', function(req) {
@@ -86,6 +90,10 @@ io.on('connection', function(socket){
 
     // hook up the join event
     socket.on('join', function(req) {
+        
+        // Add the client to the socket game room
+        socket.join(req.code);
+
         console.log("Player " + req.name + " joined game: " + req.code);
         socket.username = req.name;
         socket.code = req.code;
@@ -93,7 +101,7 @@ io.on('connection', function(socket){
         if (games[req.code]) {
             games[req.code].push({ name: req.name });
 
-            io.emit('playersUpdate', games[req.code]);
+            io.to(req.code).emit('playersUpdate', games[req.code]);
             console.log("Players: " + JSON.stringify(games));
         }
         else {
@@ -106,6 +114,3 @@ io.on('connection', function(socket){
 
 
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
-});

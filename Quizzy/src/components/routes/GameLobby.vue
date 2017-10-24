@@ -7,7 +7,7 @@
       <game v-bind:gamecode="gamecode" v-bind:players="players" v-bind:username="username"></game>
 
       <h4 class="title is-4">Chat</h4>
-      <chat v-bind:username="username"></chat>
+      <chat v-bind:username="username" v-bind:gamecode="gamecode"></chat>
   </div> 
 </template>
 

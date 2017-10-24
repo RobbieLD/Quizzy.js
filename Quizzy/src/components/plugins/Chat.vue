@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-          <div v-for="(msg, index) in messages.filter(m => m.gamecode == gamecode)" v-bind:key="index">
+          <div v-for="(msg, index) in messages" v-bind:key="index">
               <span v-bind:class="{'has-text-primary' : msg.sender == username}">{{ msg.sender }}</span> : {{ msg.message }}
           </div>
           <div class="field">
@@ -16,7 +16,7 @@
 export default {
     name: 'Chat',
     
-    props: ['username'],
+    props: ['username','gamecode'],
 
     data() {
         return {
