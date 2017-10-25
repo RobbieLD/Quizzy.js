@@ -5,6 +5,7 @@ import Landing from '@/components/routes/Landing'
 import NewGame from '@/components/routes/NewGame'
 import JoinGame from '@/components/routes/JoinGame'
 import GameLobby from '@/components/routes/GameLobby'
+import Log from '@/components/routes/Log'
 
 Vue.use(VeeValidate)
 Vue.use(Router)
@@ -31,6 +32,11 @@ export default new Router({
       name: 'GameLobby',
       component: GameLobby,
       props: true
+    },
+    {
+      path:'/log/',
+      name: 'Log',
+      component: Log
     }
   ]
 })

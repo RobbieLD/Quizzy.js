@@ -1,6 +1,6 @@
 <template>
   <section class="section">
-      <img src="../../assets/logo.png">
+      <img class="has-text-centered" src="../../assets/logo.png">
       <div class="has-text-centered">Welcome to Quizzy</div>
   </section>
 </template>

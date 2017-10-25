@@ -21,13 +21,13 @@ export default {
     
     mounted () {
         console.log('Client joining');
-        this.$socket.emit('join', { name: this.username, code: this.gamecode } );
+        this.$socket.emit('join', { userName: this.username, gameCode: this.gamecode } );
     },
 
     beforeDestroy () {
         // we need to let the server know we're disconnecting. 
         console.log("Client Leaving");
-        this.$socket.emit('leave', { name: this.username, code: this.gamecode });
+        this.$socket.emit('leave', { userName: this.username, gameCode: this.gamecode });
     }
 }
 </script>

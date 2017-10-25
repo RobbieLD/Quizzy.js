@@ -62,7 +62,7 @@ export default {
 
     methods: {
         validateJoinRequest() {
-            this.$socket.emit('validateJoin', { code: this.gamecode, name: this.username });
+            this.$socket.emit('validateJoin', { gameCode: this.gamecode, userName: this.username });
         }
     },
 
