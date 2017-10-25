@@ -1,14 +1,39 @@
 <template>
-  <!-- TODO: add in here actual game....that's a rater big TODO i'll admit. -->
   <div class="box">
-          TODO: Add the game component in here (Lots of other stuff to do first)
-      </div>
+      <!-- TODO: Make the max number of questions dynamic -->
+      <progress class="progress" v-bind:value="questionNumber" max="10">{{ questionNumber }}</progress>
+      <question v-bind:question="question"></question>
+      <!-- TODO: Timer -->
+  </div>
 </template>
 
 <script>
+import Question from '@/components/plugins/Question'
+
 export default {
     name: 'Game',
     props: ['gamecode','players','username'],
+    components: {
+        Question
+    },
+
+    data() {
+        return {
+            questionNumber: 3,
+            question: {
+                "category": "Geography",
+                "type": "multiple",
+                "difficulty": "medium",
+                "question": "What European country is not a part of the EU?",
+                "correct_answer": "Norway",
+                "incorrect_answers": [
+                    "Lithuania",
+                    "Ireland",
+                    "Czechia"
+                ]
+            }
+        }
+    },
     sockets: {
         gameError (message) {
             console.log("There was a game error: " + message);
