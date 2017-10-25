@@ -1,10 +1,10 @@
 <template>
-  <table>
-      <tr v-for="(log, index) in logs" v-bind:key="index">
-          <td>{{ log.time }}</td>
-          <td>{{ log.message }}</td>
-      </tr>
-  </table>
+    <div class="container">
+        <div v-for="(log, index) in logs" v-bind:key="index">
+            {{ log.time }} - {{ log.message }}
+            <div><tree-view v-if="log.object" v-bind:data="log.object" v-bind:options="{maxDepth: 3}"></tree-view></div>
+        </div>
+    </div>
 </template>
 
 <script>

@@ -8,14 +8,21 @@ exports.Logger = class {
     }
 
 
-    debug(message) {
+    debug(message, obj) {
         
         var logEntry = {
             time: new Date(),
-            message: message
+            message: message,
+            object: obj
         };
         
-        console.log(`${logEntry.time} - ${logEntry.message}`);
+        if (obj) {
+            console.log(`${logEntry.time} - ${logEntry.message} - ${JSON.stringify(obj)}`);
+        }
+        else {
+            console.log(`${logEntry.time} - ${logEntry.message}`);
+        }
+        
         this.emitLogEvent(logEntry);
     }
 

@@ -123,7 +123,7 @@ exports.GameServer = class {
     logGameState() {
         if (this.debug) {
             for (var key in this.games) {
-                this.logger.debug(`${this.games[key].gameCode} : ${this.games[key].toString()}`);
+                this.logger.debug(`Game State for game code: ${this.games[key].gameCode}`, this.games[key].players);
             }
         }
     }

@@ -6,7 +6,9 @@ import NewGame from '@/components/routes/NewGame'
 import JoinGame from '@/components/routes/JoinGame'
 import GameLobby from '@/components/routes/GameLobby'
 import Log from '@/components/routes/Log'
+import TreeView from 'vue-json-tree-view'
 
+Vue.use(TreeView)
 Vue.use(VeeValidate)
 Vue.use(Router)
 

@@ -14,7 +14,7 @@ exports.Chat = class {
 
             // message: { message: this.message, sender: this.username, gamecode: this.gamecode }
             socket.on('sendMessage', (message) => {
-                this.logger.debug(`Message recieved: ${JSON.stringify(message)}`);
+                this.logger.debug(`Message recieved`, message);
                 this.io.to(message.gamecode).emit('chatMessage', message );
             });
 

@@ -12,6 +12,7 @@
   "dependencies": {
     "vee-validate": "^2.0.0-rc.19",
     "vue": "^2.5.2",
+    "vue-json-tree-view": "^2.1.1",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^2.1.1-a"
   },
