@@ -2,9 +2,7 @@
   <div class="container">
       <div v-if="!status">
         <progress class="progress" v-bind:value="questionNumber" max="10">{{ questionNumber }}</progress>
-        <div class="has-text-centered">
-            {{ question.question }}
-        </div>
+        <div class="has-text-centered" v-html="question.question"></div>
         <nav class="level">
             <div v-for="(answer, index) in allAnswers" v-bind:key="index" 
                 class="level-item has-text-centered">
@@ -17,7 +15,7 @@
       </div>
       <div v-if="status" >
           <div class="has-text-centered">{{ status }}</div>
-          <button v-if="questionNumber" class="button is-primary" v-on:click="nextQuestion">Next Question</button>
+          <button v-if="questionNumber && status != 'Finished'" class="button is-primary" v-on:click="nextQuestion">Next Question</button>
       </div>
   </div>
 </template>
@@ -25,7 +23,6 @@
 <script>
 export default {
     name: 'Question',
-    // Make this trigger the start of the game
     props:['allready'],
     data() {
         return {
@@ -46,10 +43,25 @@ export default {
         }
     },
 
+    watch: {
+        allready(value) {
+            if (value) {
+                this.nextQuestion();
+            }
+        }
+    },
+
     sockets: {
         advanceQuestion(question) {
+            if (!question) {
+                // we've finished the quiz
+                this.status = "Finished"
+                return;
+            }
+
             this.question = question;
             this.questionNumber++;
+            this.status = '';
         }
     },
 

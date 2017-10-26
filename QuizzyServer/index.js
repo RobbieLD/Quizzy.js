@@ -6,11 +6,14 @@ var io = require('socket.io')(http);
 var { Chat } = require('./modules/chat/Chat');
 var { GameServer } = require('./modules/game/GameServer')
 
+// some config
+const numberOfQuestions = 10;
+
 // Start listening for chat messages
 new Chat(io).listenForMessages();
 
 // Start listening for game connections
-new GameServer(io, true, "https://opentdb.com/api.php?amount=10").listenForClients();
+new GameServer(io, true, "https://opentdb.com/api.php?amount=" + numberOfQuestions).listenForClients();
 
 // The default hander for the http connection
 app.get('/', function(req, res){

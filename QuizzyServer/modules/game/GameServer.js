@@ -43,8 +43,8 @@ exports.GameServer = class {
                 this.nextQuestion(socket);
             });
 
-            socket.on('questionAnswered', (correct, socket) => {
-                this.questionAnswered();
+            socket.on('questionAnswered', (correct) => {
+                this.questionAnswered(correct, socket);
             });
 
             socket.on('readyUpdate', (ready) => {
@@ -70,6 +70,7 @@ exports.GameServer = class {
         var game = this.games[socket.gameCode];
         var question = game.getNextQuestion(socket.userName);
         this.logger.debug(`Next question for ${socket.userName}`, question);
+        this.io.to(socket.gameCode).emit('playersUpdate', game.players);
         // send the question to the user who requested it
         this.io.to(socket.id).emit('advanceQuestion', question);
     }

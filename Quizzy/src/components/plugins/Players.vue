@@ -11,7 +11,7 @@
                   </tr>
               </thead>
               <tbody>
-                  <tr v-for="(player, key, index) in sortedPlayers" v-bind:key="index" v-bind:class="{ 'is-selected' : player.userName == username}">
+                  <tr v-for="(player, index) in sortedPlayers" v-bind:key="index" v-bind:class="{ 'is-selected' : player.userName == username}">
                     <td>{{ index + 1 }}</td>
                     <td>{{ player.userName }}</td>
                     <td>{{ player.score }}</td>
@@ -30,8 +30,7 @@ export default {
     props: ['players','username'],
     computed: {
         sortedPlayers() {
-            Object.keys(this.players).sort((a, b) => this.players[b].score - this.players[a].score);
-            return this.players;
+            return Object.values(this.players).sort((a, b) => b.score - a.score);
         },
         
         currentPlayer() {
