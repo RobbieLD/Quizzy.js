@@ -4,7 +4,7 @@
       <players v-bind:players="players" v-bind:username="username"></players>
 
       <h4 class="title is-4">Game Code: {{ gamecode }}</h4>
-      <game v-bind:gamecode="gamecode" v-bind:players="players" v-bind:username="username"></game>
+      <game v-bind:allready="allReady" v-bind:gamecode="gamecode" v-bind:players="players" v-bind:username="username"></game>
 
       <h4 class="title is-4">Chat</h4>
       <chat v-bind:username="username" v-bind:gamecode="gamecode"></chat>
@@ -21,7 +21,8 @@ export default {
     props: ['username', 'gamecode'],
     data() {
         return {
-            players: []
+            players: {},
+            allReady: false
         }
     },
 
@@ -30,13 +31,18 @@ export default {
         Game,
         Players
     },
+    
+    computed: {
+        allPlayersReady() {
+            return Object.keys(this.players).every(name => this.players[name].ready);
+        }
+    },
 
     sockets: {
-
         playersUpdate (users) {
             console.log('Updating players');
             this.players = users;
-
+            this.allReady = this.allPlayersReady;
         }   
     }
 }

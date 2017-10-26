@@ -10,7 +10,7 @@ var { GameServer } = require('./modules/game/GameServer')
 new Chat(io).listenForMessages();
 
 // Start listening for game connections
-new GameServer(io, true).listenForClients();
+new GameServer(io, true, "https://opentdb.com/api.php?amount=10").listenForClients();
 
 // The default hander for the http connection
 app.get('/', function(req, res){

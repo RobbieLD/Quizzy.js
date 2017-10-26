@@ -1,9 +1,6 @@
 <template>
   <div class="box">
-      <!-- TODO: Make the max number of questions dynamic -->
-      <progress class="progress" v-bind:value="questionNumber" max="10">{{ questionNumber }}</progress>
-      <question v-bind:question="question"></question>
-      <!-- TODO: Timer -->
+      <question v-bind:allready="allready"></question>
   </div>
 </template>
 
@@ -12,28 +9,16 @@ import Question from '@/components/plugins/Question'
 
 export default {
     name: 'Game',
-    props: ['gamecode','players','username'],
+    props: ['gamecode','players','username', 'allready'],
     components: {
         Question
     },
 
     data() {
         return {
-            questionNumber: 3,
-            question: {
-                "category": "Geography",
-                "type": "multiple",
-                "difficulty": "medium",
-                "question": "What European country is not a part of the EU?",
-                "correct_answer": "Norway",
-                "incorrect_answers": [
-                    "Lithuania",
-                    "Ireland",
-                    "Czechia"
-                ]
-            }
         }
     },
+
     sockets: {
         gameError (message) {
             console.log("There was a game error: " + message);

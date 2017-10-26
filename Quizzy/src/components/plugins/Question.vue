@@ -1,24 +1,40 @@
 <template>
   <div class="container">
-      <div class="has-text-centered">
-          {{ question.question }}
-      </div>
-      <nav class="level">
-          <div v-for="(answer, index) in allAnswers" v-bind:key="index" 
-            class="level-item has-text-centered">
-            <label class="radio">
-                <input type="radio" name="question" v-bind:value="answer">
-                {{ answer }}
-            </label>
+      <div v-if="!status">
+        <progress class="progress" v-bind:value="questionNumber" max="10">{{ questionNumber }}</progress>
+        <div class="has-text-centered">
+            {{ question.question }}
         </div>
-      </nav>
+        <nav class="level">
+            <div v-for="(answer, index) in allAnswers" v-bind:key="index" 
+                class="level-item has-text-centered">
+                <label class="radio">
+                    <input type="radio" name="question" v-on:click="answerQuestion(answer)" v-bind:value="answer">
+                    {{ answer }}
+                </label>
+            </div>
+        </nav>
+      </div>
+      <div v-if="status" >
+          <div class="has-text-centered">{{ status }}</div>
+          <button v-if="questionNumber" class="button is-primary" v-on:click="nextQuestion">Next Question</button>
+      </div>
   </div>
 </template>
 
 <script>
 export default {
     name: 'Question',
-    props: ['question'],
+    // Make this trigger the start of the game
+    props:['allready'],
+    data() {
+        return {
+            status: 'Waiting for all players to be ready to start the game',
+            questionNumber: 0,
+            question: {}
+        }
+    },
+
     computed: {
         allAnswers() {
             console.log()
@@ -30,7 +46,32 @@ export default {
         }
     },
 
+    sockets: {
+        advanceQuestion(question) {
+            this.question = question;
+            this.questionNumber++;
+        }
+    },
+
     methods: {
+        answerQuestion(answer) {
+            var correct = answer == this.question.correct_answer;
+            
+            this.$socket.emit('questionAnswered', correct);
+
+            if (correct) {
+                this.status = "Correct, well done!";
+            }
+            else {
+                this.status = `Sorry the correct answer was ${this.question.correct_answer}`;
+            }
+            
+        },
+
+        nextQuestion() {
+            this.$socket.emit('nextQuestion');
+        },
+
         shuffle(array) {
             for (var i = array.length - 1; i > 0; i--) {
                 var j = Math.floor(Math.random() * (i + 1));

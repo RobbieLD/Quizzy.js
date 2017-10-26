@@ -2,12 +2,13 @@ var { Game } = require('./Game');
 var { Logger } = require('../logger/Logger');
 
 exports.GameServer = class {
-    constructor(io,debug) {
+    constructor(io,debug, url) {
         this.io = io;
         this.debug = debug;
         this.games = {};
         this.gameCount = 100;
         this.logger = new Logger(io);
+        this.triviaUrl = url;
     }
 
     listenForClients() {
@@ -37,7 +38,40 @@ exports.GameServer = class {
             socket.on('validateJoin', (request) => {
                 this.validateJoin(request, socket);
             });
+
+            socket.on('nextQuestion', () => {
+                this.nextQuestion(socket);
+            });
+
+            socket.on('questionAnswered', (correct, socket) => {
+                this.questionAnswered();
+            });
+
+            socket.on('readyUpdate', (ready) => {
+                this.readyUpdate(ready, socket);
+            });
         });
+    }
+
+    readyUpdate(ready, socket) {
+        var game = this.games[socket.gameCode];
+        game.setPlayerReady(ready, socket.userName);
+        this.io.to(socket.gameCode).emit('playersUpdate', game.players);
+    }
+
+    questionAnswered(correct, socket) {
+        var game = this.games[socket.gameCode];
+        game.updateScore(correct, socket.userName);
+        // do the player update
+        this.io.to(socket.gameCode).emit('playersUpdate', game.players);
+    }
+
+    nextQuestion(socket) {
+        var game = this.games[socket.gameCode];
+        var question = game.getNextQuestion(socket.userName);
+        this.logger.debug(`Next question for ${socket.userName}`, question);
+        // send the question to the user who requested it
+        this.io.to(socket.id).emit('advanceQuestion', question);
     }
 
     validateJoin(request, socket) {
@@ -107,15 +141,46 @@ exports.GameServer = class {
         }
     }
 
-    createGame(socket) {
-        
-        var newGameCode = this.gameCount++;
-        this.logger.debug(`Creating game: ${newGameCode}`);
-        var newGame = new Game(newGameCode, this.io);
-        this.games[newGameCode] = newGame;
+    findEmptyGame() {
+        for(var game in this.games) {
+            if (this.games[game].players.length == 0) {
+                return game;
+            }
+        }
+    }
 
-        // Only notify the client who requested to game to be created
-        this.io.to(socket.id).emit('gameCreated', newGameCode);
+    createGame(socket) {
+
+        // To prevent there being loads of games created with no one in them
+        // we check here to see if there's any empty game we can use instead of 
+        // making a new one
+        var newGame = this.findEmptyGame();
+
+        if (!newGame) {
+            
+            var newGameCode = this.gameCount++;
+
+            try {
+                newGame = new Game(newGameCode, this.io, this.triviaUrl);
+            }
+            catch (ex) {
+                // Report the error back to the clients 
+                this.io.to(socket.id).emit('gameError', `Error getting trivia ${ex.message}`);
+                return;
+            }
+            
+            this.logger.debug(`Creating game: ${newGameCode}`);
+            this.games[newGameCode] = newGame;
+            
+            // Only notify the client who requested to game to be created
+            this.io.to(socket.id).emit('gameCreated', newGameCode);
+        }
+        else {
+            this.logger.debug(`Reusing game: ${newGame.gameCode}`);
+            
+            // Only notify the client who requested to game to be created
+            this.io.to(socket.id).emit('gameCreated', newGame.gameCode);
+        }
 
         this.logGameState();
     }
