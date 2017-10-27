@@ -37,6 +37,8 @@ export default {
         name: "Connect Error",
         message: error
       };
+      // bounce to the front page when there's an error
+      this.$router.push('/');
     },
 
     error(error) {
@@ -45,6 +47,8 @@ export default {
         name: "General Error",
         message: error
       };
+      // bounce to the front page on error
+       this.$router.push('/');
     },
 
     connect() {

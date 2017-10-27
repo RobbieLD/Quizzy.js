@@ -2,7 +2,9 @@
   <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <!-- Just using the vue logo here as i'm too lazy to make my own just yet -->
-        <router-link class="navbar-item" :to="{ name: 'Landing' }"><span id="smallLogo">Q</span></router-link>
+        <router-link class="navbar-item" :to="{ name: 'Landing' }">
+          <img class="has-text-centered" height="25" width="25" src="../../assets/logo.png">
+        </router-link>
 
         <a class="navbar-burger burger" v-bind:class="{'is-active' : burgerActive}" v-on:click="toggleBurger">
           <span></span>

@@ -73,7 +73,9 @@ exports.Game = class {
 
     join(request, socketId) {
         this.logger.debug(`Player: ${request.userName} joining game: ${this.gameCode} with socket id: ${socketId}`);
-        this.players[request.userName] = new Player(request.userName, request.gameCode, socketId);
+        if (!this.players[request.userName]) {
+            this.players[request.userName] = new Player(request.userName, request.gameCode, socketId);
+        }
     }
 
     leave(userName) {
