@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <navbar></navbar> 
     <error></error>
+    <navbar></navbar> 
     <!-- Column setup -->
     <div class="columns">
       <div class="column"></div>

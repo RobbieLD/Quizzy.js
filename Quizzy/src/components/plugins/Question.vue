@@ -1,7 +1,20 @@
 <template>
   <div class="container">
       <div v-if="!status">
-        <progress class="progress" v-bind:value="questionNumber" max="10">{{ questionNumber }}</progress>
+        
+        <section class="hero is-primary">
+            <div class="hero-body">
+                <div class="container">
+                <h1 class="title">
+                    {{ question.category }}
+                </h1>
+                <h2 class="subtitle">
+                    Difficulty: {{ question.difficulty }}
+                </h2>
+                </div>
+            </div>
+        </section>
+        <progress class="progress is-radiusless is-primary" v-bind:value="questionNumber" max="10">{{ questionNumber }}</progress>
         <div class="has-text-centered" v-html="question.question"></div>
         <nav class="level">
             <div v-for="(answer, index) in allAnswers" v-bind:key="index" 
@@ -14,8 +27,21 @@
         </nav>
       </div>
       <div v-if="status" >
-          <div class="has-text-centered">{{ status }}</div>
-          <button v-if="questionNumber && status != 'Finished'" class="button is-primary" v-on:click="nextQuestion">Next Question</button>
+        <!-- <div class="has-text-centered">{{ status }}</div> -->
+        <div class="field">
+            <section class="hero has-text-centered" v-bind:class="answerHeroClass">
+            <div class="hero-body">
+                <div class="container">
+                <h1 class="title">
+                    {{ status }}
+                </h1>
+                </div>
+            </div>
+        </section>
+        </div>
+        <p class="field">
+            <button v-if="questionNumber && showNextButton" class="button" v-bind:class="answerHeroClass" v-on:click="nextQuestion">Next Question</button>
+        </p>
       </div>
   </div>
 </template>
@@ -28,7 +54,9 @@ export default {
         return {
             status: 'Waiting for all players to be ready to start the game',
             questionNumber: 0,
-            question: {}
+            question: {},
+            showNextButton: true,
+            answerHeroClass: ''
         }
     },
 
@@ -55,7 +83,9 @@ export default {
         advanceQuestion(question) {
             if (!question) {
                 // we've finished the quiz
-                this.status = "Finished"
+                this.status = "Finished, Press f5 to start a new round ;)";
+                this.answerHeroClass = '';
+                this.showNextButton = false;
                 return;
             }
 
@@ -73,9 +103,11 @@ export default {
 
             if (correct) {
                 this.status = "Correct, well done!";
+                this.answerHeroClass = 'is-success';
             }
             else {
                 this.status = `Sorry the correct answer was ${this.question.correct_answer}`;
+                this.answerHeroClass = 'is-danger';
             }
             
         },

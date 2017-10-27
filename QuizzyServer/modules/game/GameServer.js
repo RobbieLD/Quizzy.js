@@ -143,9 +143,9 @@ exports.GameServer = class {
     }
 
     findEmptyGame() {
-        for(var game in this.games) {
-            if (this.games[game].players.length == 0) {
-                return game;
+        for(var code in this.games) {
+            if (Object.keys(this.games[code].players).length == 0) {
+                return this.games[code];
             }
         }
     }

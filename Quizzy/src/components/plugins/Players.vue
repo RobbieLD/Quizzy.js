@@ -16,8 +16,10 @@
                     <td>{{ player.userName }}</td>
                     <td>{{ player.score }}</td>
                     <td>{{ player.status }}</td>
-                    <td v-if="player.userName == username"><input type="checkbox" v-on:click="readyPlayer" name="ready"></td>
-                    <td v-if="player.userName != username">{{ player.ready ? 'Yes' : 'No' }}</td>
+                    <td v-if="player.userName == username && !currentPlayer.ready">
+                            <input type="checkbox" v-on:click="readyPlayer" v-bind="currentPlayer.ready" name="ready">
+                    </td>
+                    <td v-if="player.userName != username || currentPlayer.ready">{{ player.ready ? 'Yes' : 'No' }}</td>
                  </tr>
               </tbody>
           </table>
