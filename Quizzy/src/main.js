@@ -6,7 +6,7 @@ import router from './router'
 import VueSocketio from 'vue-socket.io'
 import 'bulma/css/bulma.css'
 
-Vue.use(VueSocketio, 'http://9bf24bc5.ngrok.io');
+Vue.use(VueSocketio, 'http://localhost:3000');
 
 Vue.config.productionTip = false
 
